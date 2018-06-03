@@ -1,7 +1,9 @@
 package io.github.ziginsider.daggerproject.adapter
 
 import android.support.v7.recyclerview.extensions.ListAdapter
+import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import io.github.ziginsider.daggerproject.Utils.inflate
 import io.github.ziginsider.daggerproject.model.Result
 
 /**
@@ -27,9 +29,9 @@ class RecyclerViewAdapter(private val layoutResId: Int, private val clickListene
     class ViewHolder(override val containerView: View?)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(photo: Photo, clickListener: (Photo) -> Unit) {
+        fun bind(photo: Result, clickListener: (Result) -> Unit) {
             with(photo) {
-                titlePhoto.text = title
+                nameVie
                 if (urlSmall != null) {
                     ImageLoader.displayImage(imagePhoto, urlSmall)
                 } else if (urlOriginal != null) {
