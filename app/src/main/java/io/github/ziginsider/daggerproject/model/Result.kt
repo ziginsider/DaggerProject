@@ -1,6 +1,5 @@
 package io.github.ziginsider.daggerproject.model
 
-import android.graphics.Picture
 import com.google.gson.annotations.SerializedName
 
 class Result(@SerializedName("gender") val gender: String,
