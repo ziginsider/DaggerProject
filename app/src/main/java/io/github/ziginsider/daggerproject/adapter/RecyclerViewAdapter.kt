@@ -5,17 +5,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import io.github.ziginsider.daggerproject.Utils.inflate
 import io.github.ziginsider.daggerproject.model.Result
+import kotlinx.android.extensions.LayoutContainer
 
 /**
- * Adapter for list of photos [Photo]
+ * Adapter for list of users [Result]
  *
- * Uses [PhotoDiffCallback] for renew list of items
+ * Uses [ResultDiffCallback] for renew list of items
  *
  * @author Alex Kisel
  * @since 2018-05-15
  */
 class RecyclerViewAdapter(private val layoutResId: Int, private val clickListener: (Result) -> Unit)
-    : ListAdapter<Result, RecyclerViewAdapter.ViewHolder>(PhotoDiffCallback()) {
+    : ListAdapter<Result, RecyclerViewAdapter.ViewHolder>(ResultDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent inflate layoutResId
@@ -29,9 +30,9 @@ class RecyclerViewAdapter(private val layoutResId: Int, private val clickListene
     class ViewHolder(override val containerView: View?)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(photo: Result, clickListener: (Result) -> Unit) {
-            with(photo) {
-                nameVie
+        fun bind(result: Result, clickListener: (Result) -> Unit) {
+            with(result) {
+
                 if (urlSmall != null) {
                     ImageLoader.displayImage(imagePhoto, urlSmall)
                 } else if (urlOriginal != null) {
