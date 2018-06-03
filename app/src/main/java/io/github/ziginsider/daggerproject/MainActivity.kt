@@ -3,6 +3,7 @@ package io.github.ziginsider.daggerproject
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import io.github.ziginsider.daggerproject.Utils.toast
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
