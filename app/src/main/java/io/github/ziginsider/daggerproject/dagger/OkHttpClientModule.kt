@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import java.io.File
 
-@Module
+@Module(includes = [(ContextModule::class)])
 class OkHttpClientModule {
 
     @Provides
