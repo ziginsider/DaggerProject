@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.list_item.*
  * @author Alex Kisel
  * @since 2018-05-15
  */
-class RecyclerViewAdapter(private val layoutResId: Int, private val clickListener: (Result) -> Unit)
+class RecyclerViewAdapter(private val layoutResId: Int, private val picasso: Picasso,
+                          private val clickListener: (Result) -> Unit)
     : ListAdapter<Result, RecyclerViewAdapter.ViewHolder>(ResultDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,18 +28,19 @@ class RecyclerViewAdapter(private val layoutResId: Int, private val clickListene
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(getItem(position), picasso, clickListener)
     }
 
     class ViewHolder(override val containerView: View?)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(result: Result, clickListener: (Result) -> Unit) {
+        fun bind(result: Result, picasso: Picasso, clickListener: (Result) -> Unit) {
             with(result) {
                 nameView.text = "${result.name.first} ${result.name.last}"
-                Picasso.with(imageView.context)
-                        .load(result.picture.large)
+
+                picasso.load(result.picture.large)
                         .into(imageView)
+
                 itemView.setOnClickListener { clickListener(this) }
             }
         }

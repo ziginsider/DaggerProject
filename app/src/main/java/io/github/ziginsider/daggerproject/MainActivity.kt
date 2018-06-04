@@ -7,6 +7,7 @@ import io.github.ziginsider.daggerproject.Utils.toast
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.gson.GsonBuilder
+import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initViews()
 
         val gsonBuilder = GsonBuilder()
         val gson = gsonBuilder.create()
@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         picasso = Picasso.Builder(this).downloader(okHttpDownloader).build()
 
+        initViews()
+
         retrofit = Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl("https://randomuser.me/")
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        recyclerAdapter = RecyclerViewAdapter(R.layout.list_item,
+        recyclerAdapter = RecyclerViewAdapter(R.layout.list_item, picasso!!,
                 { toast("I'm ${it.name.first} ${it.name.last}") })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateUsers() {
-        val randomUsersCall = getRandomUserService().getRandomUsers(10)
+        val randomUsersCall = getRandomUserService().getRandomUsers(20)
         randomUsersCall.enqueue(object: Callback<RandomUsers> {
             override fun onFailure(call: Call<RandomUsers>?, t: Throwable?) {
                 Timber.i(t!!.message)
