@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 
-@Module(includes = [(OkHttpClientModule::class)])
+@Module(includes = [OkHttpClientModule::class])
 class PicassoModule {
 
     @Provides
