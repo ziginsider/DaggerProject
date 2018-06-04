@@ -7,6 +7,7 @@ import io.github.ziginsider.daggerproject.Utils.toast
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.gson.GsonBuilder
+import com.squareup.picasso.Picasso
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import okhttp3.OkHttpClient
@@ -14,15 +15,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import io.github.ziginsider.daggerproject.model.RandomUsers
 import io.github.ziginsider.daggerproject.service.RandomUserApi
+import okhttp3.Cache
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
 
     private var recyclerAdapter: RecyclerViewAdapter? = null
     private var retrofit: Retrofit? = null
+    private var picasso: Picasso? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         Timber.plant(Timber.DebugTree())
 
+        val cacheFile = File(this.cacheDir, "HttpCache")
+        cacheFile.mkdirs()
+
+        val cache = Cache(cacheFile, 10 * 1000 * 1000)
+
         val httpLoggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { msg ->
             Timber.i(msg)
         })
@@ -42,8 +51,13 @@ class MainActivity : AppCompatActivity() {
 
         val okHttpClient = OkHttpClient()
                 .newBuilder()
+                .cache(cache)
                 .addInterceptor(httpLoggingInterceptor)
                 .build()
+
+        val okHttpDownloader = OkHttp3Downloader(okHttpClient)
+
+        picasso = Picasso.Builder(this).downloader(okHttpDownloader).build()
 
         retrofit = Retrofit.Builder()
                 .client(okHttpClient)
