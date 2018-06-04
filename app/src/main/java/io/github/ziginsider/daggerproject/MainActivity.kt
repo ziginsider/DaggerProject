@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import io.github.ziginsider.daggerproject.dagger.ContextModule
+import io.github.ziginsider.daggerproject.dagger.DaggerRandomUserComponent
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 import okhttp3.OkHttpClient
@@ -21,26 +23,39 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import javax.inject.Inject
-
 
 class MainActivity : AppCompatActivity() {
 
     private var recyclerAdapter: RecyclerViewAdapter? = null
     private var retrofit: Retrofit? = null
     private var picasso: Picasso? = null
+    private var randomUserApi: RandomUserApi? = null
 
-    @Inject lateinit var randomUserApi: RandomUserApi
+//    @Inject lateinit var randomUserApi: RandomUserApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //DaggerRandomUserComponent.create().ContextModule(this).getRandomUserService()
+        afterDagger()
 
 
 
 
+        //witoutDagger()
+    }
+
+    private fun afterDagger() {
+        val daggerRandomUserComponent = DaggerRandomUserComponent.builder()
+                .contextModule(ContextModule(this))
+                .build()
+        picasso = daggerRandomUserComponent.getPicasso()
+        initViews()
+        randomUserApi = daggerRandomUserComponent.getRandomUserService()
+        populateUsers()
+    }
+
+    private fun witoutDagger() {
         val gsonBuilder = GsonBuilder()
         val gson = gsonBuilder.create()
 
@@ -89,8 +104,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateUsers() {
-        val randomUsersCall = getRandomUserService().getRandomUsers(20)
-        randomUsersCall.enqueue(object: Callback<RandomUsers> {
+        val randomUsersCall = getRandomUserService()?.getRandomUsers(20)
+        randomUsersCall?.enqueue(object: Callback<RandomUsers> {
             override fun onFailure(call: Call<RandomUsers>?, t: Throwable?) {
                 Timber.i(t!!.message)
             }
@@ -103,7 +118,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getRandomUserService(): RandomUserApi {
-        return retrofit!!.create(RandomUserApi::class.java)
-    }
+//    private fun getRandomUserService(): RandomUserApi {
+//        return retrofit!!.create(RandomUserApi::class.java)
+//    }
+
+    fun getRandomUserService() = randomUserApi
 }
