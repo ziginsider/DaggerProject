@@ -13,17 +13,22 @@ import java.io.File
 class OkHttpClientModule {
 
     @Provides
-    fun okHttpClient(cache: Cache, httpLoggingInterceptor: HttpLoggingInterceptor) = OkHttpClient()
+    fun okHttpClient(cache: Cache, httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient
+            = OkHttpClient()
             .newBuilder()
             .cache(cache)
             .addInterceptor(httpLoggingInterceptor)
             .build()
 
     @Provides
-    fun cache(cacheFile: File) = Cache(cacheFile, 10 * 1000 * 1000)
+    fun cache(cacheFile: File): Cache = Cache(cacheFile, 10 * 1000 * 1000)
 
     @Provides
-    fun file(context: Context) = File(context.cacheDir, "HttpCache").mkdirs()
+    fun file(context: Context): File {
+        val file = File(context.cacheDir, "HttpCache")
+        file.mkdirs()
+        return  file
+    }
 
     @Provides
     fun httpLoggingInterceptor(): HttpLoggingInterceptor {

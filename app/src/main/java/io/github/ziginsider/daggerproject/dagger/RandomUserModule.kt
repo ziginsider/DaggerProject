@@ -13,10 +13,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RandomUserModule {
 
     @Provides
-    fun randomUserApi(retrofit: Retrofit) = retrofit.create(RandomUserApi::class.java)
+    fun randomUserApi(retrofit: Retrofit): RandomUserApi = retrofit.create(RandomUserApi::class.java)
 
     @Provides
-    fun retrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory, gson: Gson)
+    fun retrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory): Retrofit
             = Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://randomuser.me/")
@@ -24,8 +24,8 @@ class RandomUserModule {
             .build()
 
     @Provides
-    fun gson() = GsonBuilder().create()
+    fun gson(): Gson = GsonBuilder().create()
 
     @Provides
-    fun gsonConverterFactory(gson: Gson) = GsonConverterFactory.create(gson)
+    fun gsonConverterFactory(gson: Gson): GsonConverterFactory = GsonConverterFactory.create(gson)
 }

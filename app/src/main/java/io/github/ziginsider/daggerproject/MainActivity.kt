@@ -21,6 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,9 +30,16 @@ class MainActivity : AppCompatActivity() {
     private var retrofit: Retrofit? = null
     private var picasso: Picasso? = null
 
+    @Inject lateinit var randomUserApi: RandomUserApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //DaggerRandomUserComponent.create().ContextModule(this).getRandomUserService()
+
+
+
 
         val gsonBuilder = GsonBuilder()
         val gson = gsonBuilder.create()

@@ -8,5 +8,5 @@ import dagger.Provides
 class ContextModule(val context: Context) {
 
     @Provides
-    fun context(context: Context) = context.applicationContext
+    fun context(): Context = context.applicationContext
 }
