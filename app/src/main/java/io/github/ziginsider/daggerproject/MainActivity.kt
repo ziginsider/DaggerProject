@@ -7,8 +7,11 @@ import io.github.ziginsider.daggerproject.Utils.toast
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import com.squareup.picasso.Picasso
+import io.github.ziginsider.daggerproject.application.RandomUserApplication
 import io.github.ziginsider.daggerproject.dagger.ContextModule
+import io.github.ziginsider.daggerproject.dagger.DaggerMainActivityComponent
 import io.github.ziginsider.daggerproject.dagger.DaggerRandomUserComponent
+import io.github.ziginsider.daggerproject.dagger.MainActivityModule
 import timber.log.Timber
 import io.github.ziginsider.daggerproject.model.RandomUsers
 import io.github.ziginsider.daggerproject.service.RandomUserApi
@@ -18,14 +21,27 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    private var recyclerAdapter: RecyclerViewAdapter? = null
+    private lateinit var recyclerAdapter: RecyclerViewAdapter
     private lateinit var picasso: Picasso
     private lateinit var randomUserApi: RandomUserApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        afterDagger()
+        //afterDagger()
+        afterActivityLevelComponent()
+    }
+
+    private fun afterActivityLevelComponent() {
+        val mainActivityComponent = DaggerMainActivityComponent.builder()
+                .mainActivityModule(MainActivityModule(R.layout.list_item,
+                        { toast("I'm ${it.name.first} ${it.name.last}") }))
+                .randomUserComponent(RandomUserApplication.get(this).randomUserApplicationComponent)
+                .build()
+        initViews()
+        randomUserApi = mainActivityComponent.getRandomUserService()
+        populateUsers()
+
     }
 
     private fun afterDagger() {
@@ -40,8 +56,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initViews() {
-        recyclerAdapter = RecyclerViewAdapter(R.layout.list_item, picasso,
-                { toast("I'm ${it.name.first} ${it.name.last}") })
+//        recyclerAdapter = RecyclerViewAdapter(R.layout.list_item, picasso,
+//                { toast("I'm ${it.name.first} ${it.name.last}") })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(this@MainActivity)
             setHasFixedSize(true)
@@ -51,14 +67,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun populateUsers() {
         val randomUsersCall = getRandomUserService().getRandomUsers(20)
-        randomUsersCall.enqueue(object: Callback<RandomUsers> {
+        randomUsersCall.enqueue(object : Callback<RandomUsers> {
             override fun onFailure(call: Call<RandomUsers>?, t: Throwable?) {
                 Timber.i(t!!.message)
             }
 
             override fun onResponse(call: Call<RandomUsers>?, response: Response<RandomUsers>?) {
                 if (response!!.isSuccessful) {
-                    recyclerAdapter?.submitList(response.body()?.results)
+                    recyclerAdapter.submitList(response.body()?.results)
                 }
             }
         })
