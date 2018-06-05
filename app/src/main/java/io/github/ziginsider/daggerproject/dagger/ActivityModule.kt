@@ -5,8 +5,9 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ContextModule(val context: Context) {
+class ActivityModule(val context: Context) {
 
+    @RandomUserApplicationScope
     @Provides
-    fun context(): Context = context.applicationContext
+    fun context() = context
 }
