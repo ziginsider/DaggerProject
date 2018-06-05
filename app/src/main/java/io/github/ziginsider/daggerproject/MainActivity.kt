@@ -18,12 +18,17 @@ import io.github.ziginsider.daggerproject.service.RandomUserApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var recyclerAdapter: RecyclerViewAdapter
+    @Inject
+    lateinit var recyclerAdapter: RecyclerViewAdapter
+
     private lateinit var picasso: Picasso
-    private lateinit var randomUserApi: RandomUserApi
+
+    @Inject
+    lateinit var randomUserApi: RandomUserApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +43,8 @@ class MainActivity : AppCompatActivity() {
                         { toast("I'm ${it.name.first} ${it.name.last}") }))
                 .randomUserComponent(RandomUserApplication.get(this).randomUserApplicationComponent)
                 .build()
-        recyclerAdapter = mainActivityComponent.getRandomUserAdapter()
+        mainActivityComponent.injectMainActivity(this)
         initViews()
-        randomUserApi = mainActivityComponent.getRandomUserService()
         populateUsers()
 
     }
@@ -57,8 +61,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initViews() {
-//        recyclerAdapter = RecyclerViewAdapter(R.layout.list_item, picasso,
-//                { toast("I'm ${it.name.first} ${it.name.last}") })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(this@MainActivity)
             setHasFixedSize(true)
