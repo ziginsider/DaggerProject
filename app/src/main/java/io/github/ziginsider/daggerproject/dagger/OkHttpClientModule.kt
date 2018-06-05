@@ -24,7 +24,7 @@ class OkHttpClientModule {
     fun cache(cacheFile: File): Cache = Cache(cacheFile, 10 * 1000 * 1000)
 
     @Provides
-    fun file(context: Context): File {
+    fun file(@ForApplication context: Context): File {
         val file = File(context.cacheDir, "HttpCache")
         file.mkdirs()
         return  file

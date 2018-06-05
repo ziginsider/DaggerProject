@@ -12,7 +12,8 @@ class PicassoModule {
 
     @RandomUserApplicationScope
     @Provides
-    fun picasso(context: Context, okHttp3Downloader: OkHttp3Downloader): Picasso
+    fun picasso(@ForApplication context: Context,
+                okHttp3Downloader: OkHttp3Downloader): Picasso
             = Picasso.Builder(context)
             .downloader(okHttp3Downloader)
             .build()
