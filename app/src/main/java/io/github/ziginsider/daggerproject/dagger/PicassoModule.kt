@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 @Module(includes = [OkHttpClientModule::class])
 class PicassoModule {
 
+    @RandomUserApplicationScope
     @Provides
     fun picasso(context: Context, okHttp3Downloader: OkHttp3Downloader): Picasso
             = Picasso.Builder(context)

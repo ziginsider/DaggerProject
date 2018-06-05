@@ -15,6 +15,7 @@ class RandomUserModule {
     @Provides
     fun randomUserApi(retrofit: Retrofit): RandomUserApi = retrofit.create(RandomUserApi::class.java)
 
+    @RandomUserApplicationScope
     @Provides
     fun retrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory): Retrofit
             = Retrofit.Builder()
