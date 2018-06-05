@@ -4,7 +4,7 @@ import dagger.Component
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import io.github.ziginsider.daggerproject.service.RandomUserApi
 
-@Component(dependencies = [RandomUserComponent::class])
+@Component(modules = [MainActivityModule::class], dependencies = [RandomUserComponent::class])
 @MainActivityScope
 interface MainActivityComponent {
     fun getRandomUserAdapter(): RecyclerViewAdapter
