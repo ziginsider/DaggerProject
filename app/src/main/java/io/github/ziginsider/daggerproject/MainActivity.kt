@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                         { toast("I'm ${it.name.first} ${it.name.last}") }))
                 .randomUserComponent(RandomUserApplication.get(this).randomUserApplicationComponent)
                 .build()
+        recyclerAdapter = mainActivityComponent.getRandomUserAdapter()
         initViews()
         randomUserApi = mainActivityComponent.getRandomUserService()
         populateUsers()
