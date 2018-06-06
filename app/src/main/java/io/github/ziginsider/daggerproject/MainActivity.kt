@@ -6,11 +6,11 @@ import android.support.v7.widget.LinearLayoutManager
 import io.github.ziginsider.daggerproject.Utils.toast
 import io.github.ziginsider.daggerproject.adapter.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import com.squareup.picasso.Picasso
+//import com.squareup.picasso.Picasso
 import io.github.ziginsider.daggerproject.application.RandomUserApplication
-import io.github.ziginsider.daggerproject.dagger.ContextModule
+//import io.github.ziginsider.daggerproject.dagger.ContextModule
 import io.github.ziginsider.daggerproject.dagger.DaggerMainActivityComponent
-import io.github.ziginsider.daggerproject.dagger.DaggerRandomUserComponent
+//import io.github.ziginsider.daggerproject.dagger.DaggerRandomUserComponent
 import io.github.ziginsider.daggerproject.dagger.MainActivityModule
 import timber.log.Timber
 import io.github.ziginsider.daggerproject.model.RandomUsers
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var recyclerAdapter: RecyclerViewAdapter
 
-    private lateinit var picasso: Picasso
+    //private lateinit var picasso: Picasso
 
     @Inject
     lateinit var randomUserApi: RandomUserApi
@@ -49,15 +49,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun afterDagger() {
-        val daggerRandomUserComponent = DaggerRandomUserComponent.builder()
-                .contextModule(ContextModule(this))
-                .build()
-        picasso = daggerRandomUserComponent.getPicasso()
-        initViews()
-        randomUserApi = daggerRandomUserComponent.getRandomUserService()
-        populateUsers()
-    }
+//    private fun afterDagger() {
+//        val daggerRandomUserComponent = DaggerRandomUserComponent.builder()
+//                .contextModule(ContextModule(this))
+//                .build()
+//        picasso = daggerRandomUserComponent.getPicasso()
+//        initViews()
+//        randomUserApi = daggerRandomUserComponent.getRandomUserService()
+//        populateUsers()
+//    }
 
 
     private fun initViews() {
